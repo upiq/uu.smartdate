@@ -24,6 +24,7 @@ setup(name='uu.smartdate',
       install_requires=[
           'setuptools',
           'Products.CMFPlone',
+          'plone.browserlayer',
           # -*- Extra requirements: -*-
       ],
       extras_require = {

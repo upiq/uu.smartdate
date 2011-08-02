@@ -1,0 +1,8 @@
+Upstream: Datejs
+
+Download: http://datejs.googlecode.com/files/Datejs-all-Alpha1.zip
+
+License: MIT
+
+Via: http://datejs.com
+

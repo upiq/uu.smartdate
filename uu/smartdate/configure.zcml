@@ -1,0 +1,18 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:five="http://namespaces.zope.org/five"
+  i18n_domain="uu.smartdate">
+
+  <!-- Include configuration for dependencies in setup.py install_requires -->
+  <includeDependencies package="." />
+
+  <!-- Register this package as a Zope2 product. -->
+  <five:registerPackage package="." initialize=".zope2.initialize" />
+
+  <!-- include browser package for views and resources -->
+  <include package=".browser" />
+ 
+  <!-- Include GenericSetup profiles for policy product -->
+  <include file="profiles.zcml" />
+
+</configure>

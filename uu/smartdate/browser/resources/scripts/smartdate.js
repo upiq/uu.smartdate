@@ -86,22 +86,40 @@ var DEBUG;
 if (DEBUG == undefined) DEBUG = false;
 
 
-smartdate.get_date_inputs = function() {
-    return jq('div.smartdate input.text-widget.date-field');
+smartdate.get_date_inputs = function(classname) {
+    var base_classname = 'div.smartdate input.text-widget.date-field';
+    if ((classname == 'use-iso') || (classname == 'use-locale')) {
+        return jq(base_classname + '.' + classname);
+    }
+    return jq(base_classname);
 }
 
-/** get_format(): Return two-element array of format, title. */
-smartdate.get_format = function() {
-    return ['mm/dd/yyyy', 'MM/DD/YYYY']; /* fmt, title */
+/** locale_format(): Return two-element array of format, title. */
+smartdate.locale_format = function() {
+    var fmt = Date.CultureInfo.formatPatterns.shortDate;
+    if (fmt=='M/d/yyyy') {
+        /* safe assumption for en-US, en-PH, en-ZW, fa-IR, sw-KE locales:
+        *  Placeholder can specify multiple digits (possible, encouraged
+        *  but, technically speaking, not absolutely required).
+        */
+        title = 'MM/DD/YYYY';
+    } else {
+        title = fmt;
+    }
+    return [fmt, title]; /* fmt, title */
 }
 
 
 smartdate.hookup_placeholder = function() {
-    var fmt_title = smartdate.get_format()[1]; /* format title */
+    var fmt_title = smartdate.locale_format()[1]; /* format title */
     var long_title = "Input: " + fmt_title + ", browse calendar (&darr;) or type a shortcut (e.g. '7/1' or 'today').";
-    var inputs = smartdate.get_date_inputs();
-
-    inputs.attr('placeholder', fmt_title).attr('title', long_title);
+    var locale_inputs = smartdate.get_date_inputs('use-locale');
+    var iso_inputs = smartdate.get_date_inputs('use-iso');
+    
+    locale_inputs.attr('placeholder', fmt_title).attr('title', long_title);
+    fmt_title = 'YYYY-MM-DD'; /* ISO 8601 for all others */
+    iso_inputs.attr('placeholder', fmt_title).attr('title', long_title);
+    
     if (DEBUG) console.log('smartdate: hookup date input placholder/title attributes');
 }
 
@@ -115,15 +133,21 @@ smartdate.bind_trigger_hide_calendar = function() {
 
 
 smartdate.hookup_datepicker = function() {
-    var fmt = smartdate.get_format()[0]; //closure avoids multiple calls
+    var fmt = smartdate.locale_format()[0]; //closure avoids multiple calls
     
     smartdate.get_date_inputs().each(function(index) {
         // setup dateinput, but unbind click/focus triggers, and use
         // extrinsic trigger link to toggle calendar widget
         // Also unbind the keydown event so that we can use real input.
         var input = jq(this);
+        if (input.hasClass('use-iso')) {
+            var usefmt = 'yyyy-mm-dd';
+        } else {
+            /* format: dateinput thinks mm=month, not minutes, so lower MM */
+            var usefmt = fmt.toLowerCase();
+        }
         input.dateinput({
-            format: fmt,
+            format: usefmt,
             trigger: true
         }).unbind('click').unbind('focus').unbind('keydown');
         
@@ -161,11 +185,14 @@ smartdate.hookup_keyup_suggest = function() {
         var input = jq(this);
         if (event.which == 40) {
             /* down-arrow: pop-down calendar using keyboard */
-            smartdate.clearhints();
-            input.blur();
-            input.focus();
-            jq(this).data('dateinput').show();
-            return false;
+            var picker = input.data('dateinput');
+            if (!picker.isOpen()) {
+                smartdate.clearhints();
+                input.blur();
+                input.focus();
+                jq(this).data('dateinput').show();
+                return false;
+            }
         }
         if (event.which == 9) {         /* Tab out of input */
             smartdate.clearhints();

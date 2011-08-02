@@ -1,0 +1,13 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  xmlns:five="http://namespaces.zope.org/five">
+
+  <browser:page
+    name="date.js"
+    for="*"
+    class=".datejs.DateJSRedirectView"
+    permission="zope2.Public"
+    />
+
+</configure>
