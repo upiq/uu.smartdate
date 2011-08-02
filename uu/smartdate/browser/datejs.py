@@ -25,7 +25,7 @@ class DateJSRedirectView(object):
         filename = 'date-%s-%s.js' % (lang, terr)
         if filename not in DATEJS_FILES:
             filename = DEFAULT_FILENAME # always redirect to file that exists
-        resource = '++resource++%s/%s' (PRODNAME, filename)
+        resource = '++resource++%s-datejs/%s' (PRODNAME, filename)
         url = '/'.join((site_url, resource))
         self.request.response.redirect(url, status=302)
 

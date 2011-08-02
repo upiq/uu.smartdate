@@ -10,4 +10,21 @@
     permission="zope2.Public"
     />
 
+  <!-- resources and resource directories -->
+  <browser:resourceDirectory
+    name="uu.smartdate-scripts"
+    directory="resources/scripts" />
+  
+  <browser:resourceDirectory
+    name="uu.smartdate-styles"
+    directory="resources/styles" />
+  
+  <browser:resourceDirectory
+    name="uu.smartdate-images"
+    directory="resources/images" />
+  
+  <browser:resourceDirectory
+    name="uu.smartdate-datejs"
+    directory="resources/datejs" />
+
 </configure>
