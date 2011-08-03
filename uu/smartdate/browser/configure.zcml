@@ -10,21 +10,33 @@
     permission="zope2.Public"
     />
 
+  <browser:page
+    name="smartdate-demo"
+    for="*"
+    class=".demo.SmartDateDemoView"
+    template="smartdate-demo.pt"
+    permission="zope2.Public"
+    />
+  
   <!-- resources and resource directories -->
   <browser:resourceDirectory
     name="uu.smartdate-scripts"
-    directory="resources/scripts" />
+    directory="resources/scripts"
+    />
   
   <browser:resourceDirectory
     name="uu.smartdate-styles"
-    directory="resources/styles" />
+    directory="resources/styles"
+    />
   
   <browser:resourceDirectory
     name="uu.smartdate-images"
-    directory="resources/images" />
+    directory="resources/images"
+    />
   
   <browser:resourceDirectory
     name="uu.smartdate-datejs"
-    directory="resources/datejs" />
+    directory="resources/datejs"
+    />
 
 </configure>
