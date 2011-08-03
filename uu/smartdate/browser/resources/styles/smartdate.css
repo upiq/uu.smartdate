@@ -40,11 +40,13 @@ div.smartdate a.caltrigger {
     display:block;
     float:left;
     padding:24px 0 0 0;
-    background-image: url("./++resource++uu.smartdate-images/alcaline_spiral_calendar.png");
+    background-image: url("./++resource++uu.smartdate-images/x-office-calendar.png");
+    border-bottom:none !Important;
     background-repeat: no-repeat;
     height: 0px !Important;
     height /**/:24px;
     overflow:hidden;
     margin-left:0.1em;
     margin-top:-0.1em;
+    width:24px;
 }
