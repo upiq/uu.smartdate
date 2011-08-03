@@ -7,6 +7,7 @@
     name="date.js"
     for="*"
     class=".datejs.DateJSRedirectView"
+    layer="uu.smartdate.interfaces.ISmartdateProductLayer"
     permission="zope2.Public"
     />
 
@@ -15,27 +16,32 @@
     for="*"
     class=".demo.SmartDateDemoView"
     template="smartdate-demo.pt"
+    layer="uu.smartdate.interfaces.ISmartdateProductLayer"
     permission="zope2.Public"
     />
   
   <!-- resources and resource directories -->
   <browser:resourceDirectory
     name="uu.smartdate-scripts"
+    layer="uu.smartdate.interfaces.ISmartdateProductLayer"
     directory="resources/scripts"
     />
   
   <browser:resourceDirectory
     name="uu.smartdate-styles"
+    layer="uu.smartdate.interfaces.ISmartdateProductLayer"
     directory="resources/styles"
     />
   
   <browser:resourceDirectory
     name="uu.smartdate-images"
+    layer="uu.smartdate.interfaces.ISmartdateProductLayer"
     directory="resources/images"
     />
   
   <browser:resourceDirectory
     name="uu.smartdate-datejs"
+    layer="uu.smartdate.interfaces.ISmartdateProductLayer"
     directory="resources/datejs"
     />
 
