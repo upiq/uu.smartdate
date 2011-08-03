@@ -40,7 +40,7 @@ div.smartdate a.caltrigger {
     display:block;
     float:left;
     padding:24px 0 0 0;
-    background-image: url("++resource++uu.smartdate.alcaline_spiral_calendar.png");
+    background-image: url("./++resource++uu.smartdate-images/alcaline_spiral_calendar.png");
     background-repeat: no-repeat;
     height: 0px !Important;
     height /**/:24px;
