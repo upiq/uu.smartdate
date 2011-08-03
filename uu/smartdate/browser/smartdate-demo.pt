@@ -20,7 +20,7 @@
   <script type="text/javascript">DEBUG=true;</script>
 </metal:block>
 
-<metal:block fill-slit="style_slot">
+<metal:block fill-slot="style_slot">
   <link href=""
         tal:attributes="href string:${context/@@plone_portal_state/portal_url}/++resource++uu.smartdate-styles/smartdate.css"
         type="text/css"
