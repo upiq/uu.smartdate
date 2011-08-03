@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<object name="portal_skins">
- <object name="uu_smartdate"
-     meta_type="Filesystem Directory View"
-     directory="uu.smartdate:skins/uu_smartdate"/>
- <skin-path name="Sunburst Theme">
-  <layer name="uu_smartdate" insert-after="custom" />
- </skin-path>
-</object>
