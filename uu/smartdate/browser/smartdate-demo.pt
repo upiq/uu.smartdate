@@ -10,22 +10,10 @@
       i18n:domain="uu.smartdate">
 <head>
 <metal:block fill-slot="javascript_head_slot">
-  <!-- date.js: view will redirect (302) to locale-specific script -->
-  <script type="text/javascript"
-          src="./@@date.js"
-          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/@@date.js"></script>
-  <script type="text/javascript"
-          src=""
-          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++uu.smartdate-scripts/smartdate.js"></script>
   <script type="text/javascript">DEBUG=true;</script>
 </metal:block>
 
 <metal:block fill-slot="style_slot">
-  <link href=""
-        tal:attributes="href string:${context/@@plone_portal_state/portal_url}/++resource++uu.smartdate-styles/smartdate.css"
-        type="text/css"
-        media="all"
-        rel="stylesheet" />
 </metal:block>
 
   <title>SmartDate widget demo</title>

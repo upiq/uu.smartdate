@@ -265,6 +265,7 @@ smartdate.hookup_tooltips = function() {
         position: "center right",
         offset: [4, 20],
         effect: "fade",
+        tipClass: "smartdate-tooltip",
         opacity: 0.75
     });
 

@@ -12,7 +12,7 @@ div.smartdate div.inputhint {
    font-size:80%;
 }
 
-div.smartdate .tooltip {
+.smartdate-tooltip {
     background-color:#000;
     border:1px solid #fff;
     padding:0.3em 0.6em;
