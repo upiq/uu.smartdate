@@ -2,7 +2,7 @@ from datetime import date
 
 from plone.z3cform.layout import wrap_form
 from z3c.form import form, field, button
-from zope.interface import Interface
+from zope.interface import Interface, implements
 from zope import schema
 
 
@@ -13,6 +13,7 @@ class IDateDemoSchema(Interface):
     title = schema.TextLine(title=u'title', required=False)
     start = schema.Date(title=u'Start date', required=True)
     stop = schema.Date(title=u'Stop date', required=True)
+
 
 class DateDemoRecord(object):
     """Dummy record for demo"""
