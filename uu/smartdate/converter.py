@@ -3,6 +3,8 @@ from datetime import date
 
 from z3c.form import converter
 
+from uu.smartdate.locale import get_locale
+
 
 USA_DATE = re.compile('^([01]?[0-9])/([0123]?[0-9])/([0-9]+)$')
 
@@ -82,9 +84,11 @@ class ColloquialDateConverter(converter.DateDataConverter):
                 return False # non-conforming: fall back to locales parsing
         elif value is not None:
             return False
-        locid = self.widget.request.locale.id
-        return (locid.language.lower(),
-            locid.territory.upper()) == ('en', 'US')
+        locid = get_locale(self.widget.request).id
+        if locid.territory and locid.language:
+            return (locid.language.lower(),
+                locid.territory.upper()) == ('en', 'US')
+        return False
 
     def toWidgetValue(self, value):
         """

@@ -1,12 +1,21 @@
 <configure
   xmlns="http://namespaces.zope.org/zope"
   xmlns:browser="http://namespaces.zope.org/browser"
+  xmlns:z3c="http://namespaces.zope.org/z3c"
   xmlns:five="http://namespaces.zope.org/five">
 
   <browser:page
     name="date.js"
     for="*"
     class=".datejs.DateJSRedirectView"
+    layer="uu.smartdate.interfaces.ISmartdateProductLayer"
+    permission="zope2.Public"
+    />
+
+  <browser:page
+    name="smartdate-form-demo"
+    for="*"
+    class=".demo.DateDemoFormView"
     layer="uu.smartdate.interfaces.ISmartdateProductLayer"
     permission="zope2.Public"
     />
@@ -43,6 +52,13 @@
     name="uu.smartdate-datejs"
     layer="uu.smartdate.interfaces.ISmartdateProductLayer"
     directory="resources/datejs"
+    />
+
+  <z3c:widgetTemplate
+    mode="input"
+    widget="uu.smartdate.interfaces.ISmartdateWidget"
+    layer="uu.smartdate.interfaces.ISmartdateProductLayer"
+    template="widget.pt"
     />
 
 </configure>
