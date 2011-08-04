@@ -15,4 +15,10 @@
   <!-- Include GenericSetup profiles for policy product -->
   <include file="profiles.zcml" />
 
+  <!-- form data converter hookup -->
+  <adapter
+    factory=".converter.ColloquialDateConverter"
+    for="zope.schema.interfaces.IDate .interfaces.ISmartdateWidget"
+    />
+
 </configure>
