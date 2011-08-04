@@ -21,6 +21,14 @@
     />
 
   <browser:page
+    name="smartdate-display-form-demo"
+    for="*"
+    class=".demo.DateDemoDisplayFormView"
+    layer="uu.smartdate.interfaces.ISmartdateProductLayer"
+    permission="zope2.Public"
+    />
+
+  <browser:page
     name="smartdate-demo"
     for="*"
     class=".demo.SmartDateDemoView"
@@ -58,7 +66,14 @@
     mode="input"
     widget="uu.smartdate.interfaces.ISmartdateWidget"
     layer="uu.smartdate.interfaces.ISmartdateProductLayer"
-    template="widget.pt"
+    template="widget_input.pt"
+    />
+
+  <z3c:widgetTemplate
+    mode="display"
+    widget="uu.smartdate.interfaces.ISmartdateWidget"
+    layer="uu.smartdate.interfaces.ISmartdateProductLayer"
+    template="widget_display.pt"
     />
 
 </configure>
