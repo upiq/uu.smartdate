@@ -1,6 +1,6 @@
 from z3c.form import widget
 from z3c.form.browser import text
-from zope.interface import implmentsOnly
+from zope.interface import implementsOnly
 
 from uu.smartdate.interfaces import ISmartdateWidget
 
