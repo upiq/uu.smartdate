@@ -5,12 +5,29 @@ input.smartdate-widget {
 }
 
 div.smartdate div.inputhint {
-   position:absolute;
-   z-index:25;
-   width:8em;
-   border:1px solid #999;
-   background-color:#ffc;
-   font-size:80%;
+    padding:0.2em;
+    position:absolute;
+    line-height:1.2em;
+    left:8em;
+    z-index:25;
+    border:1px solid #999;
+    background-color:#ffc;
+    font-weight:bold;
+    color:#666;
+    font-size:1.0em;
+}
+
+div.smartdate div.inputhint div.helptext {
+    font-weight:normal;
+    font-size:70%;
+    font-style:italic;
+    color:#393;
+    padding:0.2em 0.8em;
+    line-height:1.0em;
+}
+
+div.smartdate div.cleardiv {
+    clear:both;
 }
 
 .smartdate-tooltip {
@@ -25,9 +42,13 @@ div.smartdate div.inputhint {
     font-size:67%;
     letter-spacing:0.1em;
 
-    /* outline radius for mozilla/firefox only */
+}
+
+.smartdate-tooltip, div.smartdate div.inputhint {
+    /* shadow for mozilla/webkit/IE9 only */
     -moz-box-shadow:0 0 10px #000;
     -webkit-box-shadow:0 0 10px #000;
+    -ms-box-shadow:0 0 10px #000;
 }
 
 div.smartdate input { display:block; float:left; }

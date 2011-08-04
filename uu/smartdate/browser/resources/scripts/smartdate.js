@@ -10,6 +10,11 @@ var smartdate = new Object(); // a namespace
 var jq = jQuery;
 var DEBUG; 
 
+
+/* namespaced constants: */
+smartdate.INPUTHINT_HELP = '<div class="helptext">Press <strong>&lt;ENTER&gt;</strong> to accept suggestion.</div>';
+
+
 if (DEBUG == undefined) DEBUG = false;
 
 
@@ -125,15 +130,19 @@ smartdate.hookup_keyup_suggest = function() {
     inputs.keypress(function(event) {
         /* first, trap <ENTER> to prevent form submission */
         if (event.which == 13) {
-            console.log('trapping enter');
             return false;
         }
     });
     inputs.keyup(function(event) {
         var input = jq(this);
+        var picker = input.data('dateinput');
+        if ((picker.isOpen()) && (37 <= event.which <= 40)) {
+            /* cursor arrows while picker is open, return (no hints) */
+            smartdate.clearhints();
+            return true;
+        }
         if (event.which == 40) {
             /* down-arrow: pop-down calendar using keyboard */
-            var picker = input.data('dateinput');
             if (!picker.isOpen()) {
                 smartdate.clearhints();
                 input.blur();
@@ -171,7 +180,7 @@ smartdate.hookup_keyup_suggest = function() {
                 input.after('<div class="inputhint"></div>');
             }
             tip = jq('div.inputhint', input.parent());
-            tip.html('' + (parsed.getMonth()+1) + '/' + parsed.getDate() + '/' + parsed.getFullYear());
+            tip.html(parsed.toString(Date.CultureInfo.formatPatterns.longDate) + ' ' + smartdate.INPUTHINT_HELP);
         } else {
             var tip = jq('div.inputhint', input.parent());
             if (tip.length>0) {
@@ -196,7 +205,7 @@ smartdate.hookup_blur_use_suggestion = function() {
         var parsed = Date.parse(val);
         if (parsed) {
             /* set input value */
-            input.val('' + (parsed.getMonth()+1) + '/' + parsed.getDate() +  '/' + parsed.getFullYear());
+            input.val(parsed.toString(smartdate.locale_format()[0]));
             if (Math.abs(parsed.getTime() - now.getTime()) <= five_years_ms) {
                 /* if +/- 5 years from now, set Value on calendar */
                 input.data('dateinput').setValue(parsed);
