@@ -13,8 +13,20 @@ var DEBUG;
 if (DEBUG == undefined) DEBUG = false;
 
 
+smartdate.hookup_wrappers = function() {
+    /* for all elements matching input, if unwrapped in div.smartdate, wrap */
+    var inputs = jq('input.smartdate-widget');
+    for (var i=0; i<inputs.length; i++) {
+        var input = jq(inputs[i]);
+        if (!input.parent().hasClass('smartdate')) {
+            input.wrap('<div class="smartdate" />');
+        }
+    }
+}
+
+
 smartdate.get_date_inputs = function(classname) {
-    var base_classname = 'div.smartdate input.text-widget.date-field';
+    var base_classname = 'div.smartdate input.smartdate-widget.date-field';
     if ((classname == 'use-iso') || (classname == 'use-locale')) {
         return jq(base_classname + '.' + classname);
     }
@@ -97,7 +109,7 @@ smartdate.hookup_datepicker = function() {
 }
 
 smartdate.clearhints = function() {
-    var inputs = jq('input.text-widget.date-field');
+    var inputs = smartdate.get_date_inputs();
     for (var i=0; i<inputs.length; i++) {
         input = jq(inputs[i]);
         jq('div.inputhint', input.parent()).remove();
@@ -201,6 +213,7 @@ smartdate.hookup_tooltips = function() {
 
 
 smartdate.hookups = function() {
+    smartdate.hookup_wrappers(); // necessary for prog. enh.
     smartdate.hookup_placeholder();
     smartdate.hookup_datepicker();
     smartdate.hookup_keyup_suggest();

@@ -14,25 +14,25 @@
 </metal:block>
 
 <metal:block fill-slot="style_slot">
+ <!-- demo-specific styles -->
+ <style>
+ form.testform label, div.smartdate { display:block; clear:both !Important; }
+ </style>
 </metal:block>
 
   <title>SmartDate widget demo</title>
 </head>
 <body>
 <div metal:fill-slot="main">
-  <form action=".">
-    <div class="smartdate">
-      <label>Pick a date (locale)</label>
-      <input class="text-widget date-field use-locale" value="" type="text" />
-    </div>
-    <div class="smartdate">
-      <label>Pick a date (ISO 8601)</label>
-      <input class="text-widget date-field use-iso" value="" type="text" />
-    </div>
-    <div class="smartdate">
-      <label>Pick a date (locale)</label>
-      <input class="text-widget date-field use-locale" value="" type="text" />
-    </div>
+  <form class="testform" action=".">
+    <label>Pick a date (locale)</label>
+    <input class="smartdate-widget date-field use-locale" value="" type="text" />
+    
+    <label>Pick a date (ISO 8601)</label>
+    <input class="smartdate-widget date-field use-iso" value="" type="text" />
+    
+    <label>Pick a date (locale)</label>
+    <input class="smartdate-widget date-field use-locale" value="" type="text" />
   </form>
 </div>
 </body>

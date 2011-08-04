@@ -1,6 +1,7 @@
-div.smartdate input.date-field {
-    width:7em;
-    font-size:0.6em;
+input.smartdate-widget {
+    width:7.0em;
+    font-size:80% !Important; /* override dateinput style on .date */
+    text-align:center;
 }
 
 div.smartdate div.inputhint {
@@ -29,12 +30,7 @@ div.smartdate div.inputhint {
     -webkit-box-shadow:0 0 10px #000;
 }
 
-div.smartdate {
-    clear:both;
-}
-
-div.smartdate input, div.smartdate label { display:block; float:left; }
-div.smartdate label { padding:0.2em 1em 0.2em 0; height:24px; }
+div.smartdate input { display:block; float:left; }
 
 div.smartdate a.caltrigger {
     display:block;
