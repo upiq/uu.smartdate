@@ -18,8 +18,10 @@ smartdate.hookup_wrappers = function() {
     var inputs = jq('input.smartdate-widget');
     for (var i=0; i<inputs.length; i++) {
         var input = jq(inputs[i]);
+        input.attr('autocomplete', 'off');
         if (!input.parent().hasClass('smartdate')) {
             input.wrap('<div class="smartdate" />');
+            input.after('<div class="cleardiv" />');
         }
     }
 }
@@ -120,6 +122,13 @@ smartdate.clearhints = function() {
 smartdate.hookup_keyup_suggest = function() {
     var inputs = smartdate.get_date_inputs();
     inputs.unbind('keyup'); /* no dupe handling on hooked-up; rebind all */
+    inputs.keypress(function(event) {
+        /* first, trap <ENTER> to prevent form submission */
+        if (event.which == 13) {
+            console.log('trapping enter');
+            return false;
+        }
+    });
     inputs.keyup(function(event) {
         var input = jq(this);
         if (event.which == 40) {
