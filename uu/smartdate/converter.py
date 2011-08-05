@@ -26,7 +26,7 @@ def normalize_usa_date(v):
         year = int(groups[2])
     except TypeError:
         return None
-    if not ((0 < month < 13) and (0 < day < 31) and (0 < year)):
+    if not ((0 < month < 13) and (0 < day <= 31) and (0 < year)):
         return None
     if len(str(year)) <= 2:
         today = date.today()
