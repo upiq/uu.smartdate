@@ -99,7 +99,7 @@ class ColloquialDateConverter(converter.DateDataConverter):
         
         * Superclass toWidgetValue if locale is not en-US.
         """
-        if self._use_colloquial_usa_short_date(self):
+        if self._use_colloquial_usa_short_date():
             # en-US: use strftime to get MM/DD/YYYY:
             return value.strftime('%m/%d/%Y')
         else:
