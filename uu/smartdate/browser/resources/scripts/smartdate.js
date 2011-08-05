@@ -155,6 +155,9 @@ smartdate.hookup_keyup_suggest = function() {
         if (event.which == 9) {         /* Tab out of input */
             smartdate.clearhints();
             //var picker = input.data('dateinput');
+            if (input.data('validator')) {
+                input.data('validator').reset(input);
+            }
             smartdate.get_date_inputs().each(function() {
                 jq(this).data('dateinput').hide();
             }); /*hide all calendar pickers that may be visible */
@@ -163,12 +166,18 @@ smartdate.hookup_keyup_suggest = function() {
         }
         if (event.which == 27) {        /* escape key clears */
             smartdate.clearhints();
+            if (input.data('validator')) {
+                input.data('validator').reset(input);
+            }
             input.data('dateinput').setValue(Date.parse('now'));
             input.val('');
             return false;
         }
         if (event.which == 13) { /* CR */
             smartdate.clearhints();
+            if (input.data('validator')) {
+                input.data('validator').reset(input);
+            }
             input.blur(); /* trigger on-blur: e.g. load suggested date */
             input.focus();
             return false; //do not submit form
