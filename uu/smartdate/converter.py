@@ -101,6 +101,8 @@ class ColloquialDateConverter(converter.DateDataConverter):
         """
         if self._use_colloquial_usa_short_date():
             # en-US: use strftime to get MM/DD/YYYY:
+            if value is None:
+                return ''
             return value.strftime('%m/%d/%Y')
         else:
             return super(ColloquialDateConverter, self).toWidgetValue(value)
