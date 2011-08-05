@@ -4,6 +4,10 @@ input.smartdate-widget {
     text-align:center;
 }
 
+div.smartdate {
+    position:relative;
+}
+
 div.smartdate div.inputhint {
     padding:0.2em;
     position:absolute;
