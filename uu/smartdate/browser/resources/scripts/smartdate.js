@@ -104,6 +104,7 @@ smartdate.hookup_datepicker = function() {
         var picker = input.data('dateinput');
         input.unbind('onShow').unbind('onHide'); /* avoid duplicate event handling */
         input.bind('onShow', function() {
+            //input.tooltip().hide();
             triggerlink.bind('click', smartdate.bind_trigger_hide_calendar);
             smartdate.clearhints();
         });
@@ -220,7 +221,7 @@ smartdate.hookup_tooltips = function() {
     var inputs = smartdate.get_date_inputs();
     inputs.tooltip({
         position: "center right",
-        offset: [4, 20],
+        offset: [4, 25],
         effect: "fade",
         tipClass: "smartdate-tooltip",
         opacity: 0.75
