@@ -10,10 +10,9 @@ var smartdate = new Object(); // a namespace
 var jq = jQuery;
 var DEBUG; 
 
-
 /* namespaced constants: */
 smartdate.INPUTHINT_HELP = '<div class="helptext">Press <strong>&lt;ENTER&gt;</strong> to accept suggestion.</div>';
-
+smartdate.FIVE_YEARS_MS = 5 * 365 * 24 * 60 * 60 * 1000; // five years in ms
 
 if (DEBUG == undefined) DEBUG = false;
 
@@ -116,36 +115,58 @@ smartdate.hookup_datepicker = function() {
     if (DEBUG) console.log('smartdate: hookup date picker');
 }
 
-smartdate.clearhints = function() {
+smartdate.clearhints = function(input) {
     var inputs = smartdate.get_date_inputs();
-    for (var i=0; i<inputs.length; i++) {
-        input = jq(inputs[i]);
+    if (input) {
+        input = jq(input);
         jq('div.inputhint', input.parent()).remove();
+        if (input.data('validator')) {
+            input.data('validator').reset(input);   /* will unbind keyup, so... */
+            smartdate.hookup_keyup_suggest(input); /* rebind keyup! */
+        }
+    } else {
+        for (var i=0; i<inputs.length; i++) {
+            input = jq(inputs[i]);
+            jq('div.inputhint', input.parent()).remove();
+        }
     }
 }
 
 
-smartdate.hookup_keyup_suggest = function() {
-    var inputs = smartdate.get_date_inputs();
-    inputs.unbind('keyup'); /* no dupe handling on hooked-up; rebind all */
+smartdate.hide_pickers = function() {
+    smartdate.get_date_inputs().each(function() {
+        jq(this).data('dateinput').hide();
+    }); /*hide all calendar pickers that may be visible */
+}
+
+
+smartdate.hookup_keyup_suggest = function(input) {
+    var inputs;
+    if (input) {
+        inputs = jq(input);
+    } else {
+        inputs = smartdate.get_date_inputs();
+    }
     inputs.keypress(function(event) {
-        /* first, trap <ENTER> to prevent form submission */
-        if (event.which == 13) {
-            return false;
-        }
+        var which = (event.which==0 && event.keyCode) ? event.keyCode : event.which;
+        if (which == 13) return false; /* trap <ENTER> - don't submit form */
+        return true;
     });
+    inputs.unbind('keyup'); /* no dupe handling on hooked-up; rebind all */
+    if (DEBUG) console.log('keyups unbound');
     inputs.keyup(function(event) {
+        if (DEBUG) console.log('keyup: ' + event.which);
         var input = jq(this);
         var picker = input.data('dateinput');
         if ((picker.isOpen()) && (37 <= event.which <= 40)) {
             /* cursor arrows while picker is open, return (no hints) */
-            smartdate.clearhints();
+            smartdate.clearhints(input);
             return true;
         }
         if (event.which == 40) {
             /* down-arrow: pop-down calendar using keyboard */
             if (!picker.isOpen()) {
-                smartdate.clearhints();
+                smartdate.clearhints(input);
                 input.blur();
                 input.focus();
                 jq(this).data('dateinput').show();
@@ -153,33 +174,19 @@ smartdate.hookup_keyup_suggest = function() {
             }
         }
         if (event.which == 9) {         /* Tab out of input */
-            smartdate.clearhints();
-            //var picker = input.data('dateinput');
-            if (input.data('validator')) {
-                input.data('validator').reset(input);
-            }
-            smartdate.get_date_inputs().each(function() {
-                jq(this).data('dateinput').hide();
-            }); /*hide all calendar pickers that may be visible */
-            //picker.hide();
+            smartdate.clearhints();                     /* clear suggest hint/tip */
+            smartdate.hide_pickers();
             return true;
         }
         if (event.which == 27) {        /* escape key clears */
-            smartdate.clearhints();
-            if (input.data('validator')) {
-                input.data('validator').reset(input);
-            }
+            smartdate.clearhints(input);                /* clear suggest hint/tip */
             input.data('dateinput').setValue(Date.parse('now'));
             input.val('');
             return false;
         }
         if (event.which == 13) { /* CR */
-            smartdate.clearhints();
-            if (input.data('validator')) {
-                input.data('validator').reset(input);
-            }
-            input.blur(); /* trigger on-blur: e.g. load suggested date */
-            input.focus();
+            smartdate.parse(input);                     /* load suggested date */
+            smartdate.clearhints(input);                /* clear suggest hint/tip */
             return false; //do not submit form
         }
         var val = input.val();
@@ -203,24 +210,29 @@ smartdate.hookup_keyup_suggest = function() {
 }
 
 
-smartdate.hookup_blur_use_suggestion = function() {
-    /* some date delta contstants: */
+smartdate.parse = function(input) {
+    input = jq(input); // wrap if/as needed
     var now = Date.parse('now');
-    var five_years_ms = 5 * 365 * 24 * 60 * 60 * 1000; // five years in ms
+    var val = input.val();
+    var parsed = Date.parse(val);
+    if (parsed) {
+        /* set input value */
+        input.val(parsed.toString(smartdate.locale_format()[0]));
+        if (Math.abs(parsed.getTime() - now.getTime()) <= smartdate.FIVE_YEARS_MS) {
+            /* if +/- 5 years from now, set Value on calendar */
+            input.data('dateinput').setValue(parsed);
+        }
+        smartdate.clearhints();
+    }
+}
+
+smartdate.hookup_blur_use_suggestion = function() {
     /* get inputs, bind blur event */
     var inputs = smartdate.get_date_inputs();
+    inputs.unbind('blur');
     inputs.bind('blur', function(event) {
-        var input = jq(this);
-        var val = input.val();
-        var parsed = Date.parse(val);
-        if (parsed) {
-            /* set input value */
-            input.val(parsed.toString(smartdate.locale_format()[0]));
-            if (Math.abs(parsed.getTime() - now.getTime()) <= five_years_ms) {
-                /* if +/- 5 years from now, set Value on calendar */
-                input.data('dateinput').setValue(parsed);
-            }
-        }
+        if (DEBUG) console.log('smartdate: blur event handler');
+        smartdate.parse(this);
     });
     if (DEBUG) console.log('smartdate: hookup input suggestion parsing on blur');
 }
