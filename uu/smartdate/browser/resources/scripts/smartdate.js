@@ -263,7 +263,6 @@ smartdate.hookup_tooltips = function() {
         if (input.data('tooltip')) {
             input.removeData('tooltip'); /* remove stale/previous */
         }
-        console.log(input);
         input.tooltip({
             position: "center right",
             offset: [4, 25],
