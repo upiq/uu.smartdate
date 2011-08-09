@@ -15,7 +15,7 @@
     />
 
   <javascript
-    cacheable="True"
+    cacheable="False"
     compression="none"
     cookable="False"
     enabled="True"
