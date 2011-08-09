@@ -59,7 +59,7 @@ smartdate.locale_format = function() {
 smartdate.hookup_placeholder = function() {
     var fmt_title = smartdate.locale_format()[1]; /* format title */
     var long_title = "Input: " + fmt_title + ", browse calendar (&darr;) or type a shortcut (e.g. '7/1' or 'today').";
-    var locale_inputs = smartdate.get_date_inputs('use-locale');
+    var locale_inputs = smartdate.get_date_inputs();
     var iso_inputs = smartdate.get_date_inputs('use-iso');
     
     locale_inputs.attr('placeholder', fmt_title).attr('title', long_title);
