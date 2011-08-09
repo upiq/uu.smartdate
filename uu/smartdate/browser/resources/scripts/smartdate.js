@@ -10,6 +10,7 @@ var smartdate = new Object(); // a namespace
 var jq = jQuery;
 var DEBUG; 
 
+
 /* namespaced constants: */
 smartdate.INPUTHINT_HELP = '<div class="helptext">Press <strong>&lt;ENTER&gt;</strong> to accept suggestion.</div>';
 smartdate.FIVE_YEARS_MS = 5 * 365 * 24 * 60 * 60 * 1000; // five years in ms
@@ -80,6 +81,14 @@ smartdate.bind_trigger_hide_calendar = function() {
 smartdate.hookup_datepicker = function() {
     var fmt = smartdate.locale_format()[0]; //closure avoids multiple calls
     
+    //localize calendar picker using DateJS globalization info
+    jq.tools.dateinput.localize(Date.CultureInfo.name.split('-')[0], {
+        months: Date.CultureInfo.monthNames.join(','),
+        shortMonths: Date.CultureInfo.abbreviatedMonthNames.join(','),
+        days: Date.CultureInfo.dayNames.join(','),
+        shortDays: Date.CultureInfo.abbreviatedDayNames.join(','),
+    });
+    
     smartdate.get_date_inputs().each(function(index) {
         // setup dateinput, but unbind click/focus triggers, and use
         // extrinsic trigger link to toggle calendar widget
@@ -93,19 +102,26 @@ smartdate.hookup_datepicker = function() {
         }
         input.dateinput({
             format: usefmt,
-            trigger: true
-        }).unbind('click').unbind('focus').unbind('keydown');
+            trigger: true,
+            firstDay: Date.CultureInfo.firstDayOfWeek,
+            lang: Date.CultureInfo.name.split('-')[0]
+        }).unbind('click').unbind('keydown').unbind('focus');
         
         /* show calendar trigger link */
         var triggerlink = input.next('a.caltrigger');
         triggerlink.html('Calendar');
 
-        var picker = input.data('dateinput');
         input.unbind('onShow').unbind('onHide'); /* avoid duplicate event handling */
         input.bind('onShow', function() {
-            //input.tooltip().hide();
-            triggerlink.bind('click', smartdate.bind_trigger_hide_calendar);
-            smartdate.clearhints();
+            if (input.data('dateinput').isOpen()) {
+                /* event filter: really showing, not just focus of input? */
+                triggerlink.bind('click', smartdate.bind_trigger_hide_calendar);
+                smartdate.clearhints();
+                var tipapi = input.data('tooltip');
+                if (tipapi) {
+                    tipapi.hide();
+                }
+            }
         });
         input.bind('onHide', function() {
             triggerlink.unbind('click', smartdate.bind_trigger_hide_calendar);
@@ -153,7 +169,6 @@ smartdate.hookup_keyup_suggest = function(input) {
         return true;
     });
     inputs.unbind('keyup'); /* no dupe handling on hooked-up; rebind all */
-    if (DEBUG) console.log('keyups unbound');
     inputs.keyup(function(event) {
         if (DEBUG) console.log('keyup: ' + event.which);
         var input = jq(this);
@@ -167,8 +182,7 @@ smartdate.hookup_keyup_suggest = function(input) {
             /* down-arrow: pop-down calendar using keyboard */
             if (!picker.isOpen()) {
                 smartdate.clearhints(input);
-                input.blur();
-                input.focus();
+                input.tooltip().hide();
                 jq(this).data('dateinput').show();
                 return false;
             }
@@ -223,6 +237,10 @@ smartdate.parse = function(input) {
             input.data('dateinput').setValue(parsed);
         }
         smartdate.clearhints();
+        var tipapi = input.data('tooltip');
+        if (tipapi) {
+            tipapi.hide();
+        }
     }
 }
 
@@ -240,12 +258,19 @@ smartdate.hookup_blur_use_suggestion = function() {
 
 smartdate.hookup_tooltips = function() {
     var inputs = smartdate.get_date_inputs();
-    inputs.tooltip({
-        position: "center right",
-        offset: [4, 25],
-        effect: "fade",
-        tipClass: "smartdate-tooltip",
-        opacity: 0.75
+    inputs.each(function(index) {
+        var input = jq(this);
+        if (input.data('tooltip')) {
+            input.removeData('tooltip'); /* remove stale/previous */
+        }
+        console.log(input);
+        input.tooltip({
+            position: "center right",
+            offset: [4, 25],
+            effect: "fade",
+            tipClass: "smartdate-tooltip",
+            opacity: 0.75
+        });
     });
 
     if (DEBUG) console.log('smartdate: hookup date input tooltips using jquery tools');
@@ -253,12 +278,13 @@ smartdate.hookup_tooltips = function() {
 
 
 smartdate.hookups = function() {
-    smartdate.hookup_wrappers(); // necessary for prog. enh.
-    smartdate.hookup_placeholder();
-    smartdate.hookup_datepicker();
-    smartdate.hookup_keyup_suggest();
-    smartdate.hookup_blur_use_suggestion();
-    smartdate.hookup_tooltips();
+    /* if used with JQT validator, hook-up validator first, then this */
+    smartdate.hookup_wrappers();            /* prog-enhancement to ordinary input */
+    smartdate.hookup_placeholder();         /* setup placeholder, title attrs */
+    smartdate.hookup_datepicker();          /* JQuery Tools dateinput */ 
+    smartdate.hookup_blur_use_suggestion(); /* Date-parsing on blur event */
+    smartdate.hookup_tooltips();            /* tooltip uses title attr */
+    smartdate.hookup_keyup_suggest();       /* Handle cursor, enter, tab, esc navigation */
 }
 
 
