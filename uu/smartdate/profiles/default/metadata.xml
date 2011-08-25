@@ -1,3 +1,6 @@
 <metadata>
   <version>0.1dev</version>
+  <dependencies>
+    <dependency>profile-plone.app.jquerytols:default</dependency>
+  </dependencies>
 </metadata>
