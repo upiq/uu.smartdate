@@ -37,6 +37,8 @@ def normalize_usa_date(v):
     if len(str(year)) != 4:
         return None
     try:
+        if year < 1900:
+            raise RuntimeError('dates prior to 1900 unsupported') #for now
         return date(year, month, day)
     except ValueError:
         return None
@@ -99,6 +101,15 @@ class ColloquialDateConverter(converter.DateDataConverter):
         
         * Superclass toWidgetValue if locale is not en-US.
         """
+        if value and value.year < 1900:
+            # fixups for possibly improperly stored values
+            normalized_year = int(str(value.year)[-2:])
+            today = date.today()
+            century_base = today.year - (today.year % 100)
+            if normalized_year >= 70:
+                century_base -= 100
+            normalized_year = century_base + normalized_year
+            value = date(normalized_year, *value.timetuple()[1:3])
         if self._use_colloquial_usa_short_date():
             # en-US: use strftime to get MM/DD/YYYY:
             if value is None:
