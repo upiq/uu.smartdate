@@ -86,7 +86,9 @@ class ColloquialDateConverter(converter.DateDataConverter):
                 return False # non-conforming: fall back to locales parsing
         elif value is not None:
             return False
-        locid = get_locale(self.widget.request).id
+        locid = getattr(get_locale(self.widget.request), 'id', None)
+        if locid is None:
+            return True # req without locale, usually test request
         if locid.territory and locid.language:
             return (locid.language.lower(),
                 locid.territory.upper()) == ('en', 'US')
