@@ -36,6 +36,15 @@
     insert-after="@@date.js"
     />
 
-
+  <javascript
+    cacheable="True"
+    compression="safe"
+    cookable="True"
+    enabled="True"
+    id="++resource++uu.smartdate-scripts/monkeypatch_datagrid.js"
+    inline="False"
+    expression=""
+    insert-after="++resource++collective.z3cform.datagridfield/datagridfield.js"
+    />
 
 </object>

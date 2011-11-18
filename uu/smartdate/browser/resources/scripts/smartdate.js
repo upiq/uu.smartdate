@@ -24,6 +24,7 @@ smartdate.hookup_wrappers = function() {
     for (var i=0; i<inputs.length; i++) {
         var input = jq(inputs[i]);
         input.attr('autocomplete', 'off');
+        if (input.parents('.datagridwidget-empty-row').length) continue;
         if (!input.parent().hasClass('smartdate')) {
             input.wrap('<div class="smartdate" />');
             input.after('<div class="cleardiv" />');
