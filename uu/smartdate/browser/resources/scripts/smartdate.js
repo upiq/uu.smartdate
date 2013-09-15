@@ -241,16 +241,33 @@ var smartdate = (function (ns, $) {
     };
 
     ns.tooltip = function (input) {
-        if (input.data('tooltip')) {
-            input.removeData('tooltip');  // remove stale/previous
-        }
-        input.tooltip({
-            position: 'center right',
-            offset: [4, 25],
-            effect: 'fade',
-            tipClass: 'smartdate-tooltip',
+        var div = $('<div class="smartdate-tooltip">'),
+            offset = $(input).parent('div.smartdate').offset(),
+            inputRight = offset.left + input.width(),
+            top = offset.top + 55,
+            left = inputRight + 45,
+            api = $(input).data('tooltip') || {
+                div: div,
+                show: function () {
+                    div.show();
+                },
+                hide: function () {
+                    div.hide();
+                }
+            };
+        input.focus(api.show);
+        input.blur(api.hide);
+        div.html(input.attr('title') || '');
+        $('body').append(div);
+        div.css({
+            position: 'absolute',
+            display: 'block',
+            top: top,
+            left: left,
             opacity: 0.75
-        });
+        }).hide();
+        input.removeAttr('title');
+        input.data('tooltip', api);
     };
 
     ns.hookup_tooltips = function () {
