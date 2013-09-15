@@ -240,23 +240,27 @@ var smartdate = (function (ns, $) {
         ns.log('smartdate: hookup input suggestion parsing on blur');
     };
 
+    ns.tooltip = function (input) {
+        if (input.data('tooltip')) {
+            input.removeData('tooltip');  // remove stale/previous
+        }
+        input.tooltip({
+            position: 'center right',
+            offset: [4, 25],
+            effect: 'fade',
+            tipClass: 'smartdate-tooltip',
+            opacity: 0.75
+        });
+    };
+
     ns.hookup_tooltips = function () {
         var inputs = ns.get_date_inputs();
         inputs.each(function(index) {
             var input = $(this);
-            if (input.data('tooltip')) {
-                input.removeData('tooltip');  // remove stale/previous
-            }
-            input.tooltip({
-                position: 'center right',
-                offset: [4, 25],
-                effect: 'fade',
-                tipClass: 'smartdate-tooltip',
-                opacity: 0.75
-            });
+            ns.tooltip(input);
         });
 
-        ns.log('smartdate: hookup date input tooltips using jquery tools');
+        ns.log('smartdate: hookup date input tooltips');
     };
 
     ns.hookups = function () {
@@ -273,6 +277,8 @@ var smartdate = (function (ns, $) {
         ns.hookups();
         ns.log('loaded smartdate');
     });
+
+    return ns;
 
 }(smartdate || {}, jQuery));
 
