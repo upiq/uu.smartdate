@@ -229,14 +229,15 @@ var smartdate = (function (ns, $) {
         }
     };
 
+    ns.normalize_on_blur = function (evt) {
+        ns.log('smartdate: blur event handler');
+        ns.normalize(this);
+    };
+
     ns.hookup_blur_use_suggestion = function () {
         // get inputs, bind blur event
         var inputs = ns.get_date_inputs();
-        inputs.unbind('blur');
-        inputs.bind('blur', function(event) {
-            ns.log('smartdate: blur event handler');
-            ns.normalize(this);
-        });
+        inputs.live('blur', ns.normalize_on_blur);
         ns.log('smartdate: hookup input suggestion parsing on blur');
     };
 
