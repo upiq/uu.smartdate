@@ -18,6 +18,6 @@ jQuery(document).ready(function() {
         }
     }
     smartdate.hookups();
-    if (DEBUG) console.log('re-loaded smartdate after monkey patching data grid field');
+    smartdate.log('re-loaded smartdate after monkey patching data grid field');
 });
 
