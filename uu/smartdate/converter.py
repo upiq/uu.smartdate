@@ -38,7 +38,7 @@ def normalize_usa_date(v):
         return None
     try:
         if year < 1900:
-            raise RuntimeError('dates prior to 1900 unsupported') #for now
+            raise RuntimeError('dates prior to 1900 unsupported')  # for now
         return date(year, month, day)
     except ValueError:
         return None
@@ -48,26 +48,26 @@ class ColloquialDateConverter(converter.DateDataConverter):
     """
     ...only ethnocentric because ICU locales are broken for en-US short
        date...
-    
-    A data converter that tries MM/DD/YYYY output if the locale is 
+
+    A data converter that tries MM/DD/YYYY output if the locale is
     en-US, but falls back to locale conversion when value does not
     match MM/DD/YYYY pattern.
-    
+
     The reason for such behavior is that ICU locales [1] argue
     that MM/DD/YY (two-digit) year is the one and only acceptable
     short date format for US users, when in practical cultural terms
     this is deprecated in favor of four digit years.
-    
-    zope.i18n.locales mimics ICU verbatim, thus we override in 
+
+    zope.i18n.locales mimics ICU verbatim, thus we override in
     a converter as a simple work-around.
-    
+
     [1] http://demo.icu-project.org/icu-bin/locexp?_=en_US
-    
-    While the extra behavior for en-US locale differs from 
+
+    While the extra behavior for en-US locale differs from
     DateDataConverter superclass behavior, for all other locales,
     this acts equivalently to DataDataConverter and uses
     zope.i18n.locales for conversion (parsing, formatting).
-   
+
     This attempts to only in certain constraints deviate from the
     norm of locale-based parsing.  It also tries to be forgiving
     of variations in exact syntax of American y/m/d dates...
@@ -83,24 +83,24 @@ class ColloquialDateConverter(converter.DateDataConverter):
         """
         if isinstance(value, basestring):
             if normalize_usa_date(value) is None:
-                return False # non-conforming: fall back to locales parsing
+                return False  # non-conforming: fall back to locales parsing
         elif value is not None:
             return False
         locid = getattr(get_locale(self.widget.request), 'id', None)
         if locid is None:
-            return True # req without locale, usually test request
+            return True  # req without locale, usually test request
         if locid.territory and locid.language:
-            return (locid.language.lower(),
-                locid.territory.upper()) == ('en', 'US')
+            loc = (locid.language.lower(), locid.territory.upper())
+            return loc == ('en', 'US')
         return False
 
     def toWidgetValue(self, value):
         """
         Convert date to widget value, via:
-        
+
         * MM/DD/YYYY format (short us format with four-digit
           year) if and only if locale is en-US.
-        
+
         * Superclass toWidgetValue if locale is not en-US.
         """
         if value and value.year < 1900:
@@ -119,7 +119,7 @@ class ColloquialDateConverter(converter.DateDataConverter):
             return value.strftime('%m/%d/%Y')
         else:
             return super(ColloquialDateConverter, self).toWidgetValue(value)
-    
+
     def toFieldValue(self, value):
         """
         Parse MM/DD/YYYY if locale is en-US and string value apppears

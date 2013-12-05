@@ -6,7 +6,8 @@ from zope.interface import Interface, implements
 from zope import schema
 
 
-from uu.smartdate.browser.widget import SmartdateFieldWidget 
+from uu.smartdate.browser.widget import SmartdateFieldWidget
+
 
 class IDateDemoSchema(Interface):
     """Demo form schema for smart-date"""
@@ -17,7 +18,9 @@ class IDateDemoSchema(Interface):
 
 class DateDemoRecord(object):
     """Dummy record for demo"""
+
     implements(IDateDemoSchema)
+
     def __init__(self, title=u'', start=date.today(), end=date.today()):
         self.title = title
         self.start = start
@@ -29,14 +32,14 @@ class DateDemoForm(form.Form):
     fields = field.Fields(IDateDemoSchema)
     ignoreContext = True
     label = u'Date form demo'
-   
+
     def updateWidgets(self):
         datefields = [f.field for f in self.fields.values()
-                        if schema.interfaces.IDate.providedBy(f.field)]
+                      if schema.interfaces.IDate.providedBy(f.field)]
         for field in datefields:
             self.fields[field.__name__].widgetFactory = SmartdateFieldWidget
         super(DateDemoForm, self).updateWidgets()
- 
+
     @button.buttonAndHandler(u'Submit form')
     def handleApply(self, action):
         data, errors = self.extractData()
@@ -58,16 +61,14 @@ class DateDemoDisplayForm(form.DisplayForm):
 
     def updateWidgets(self):
         datefields = [f.field for f in self.fields.values()
-                        if schema.interfaces.IDate.providedBy(f.field)]
+                      if schema.interfaces.IDate.providedBy(f.field)]
         for field in datefields:
             self.fields[field.__name__].widgetFactory = SmartdateFieldWidget
         super(DateDemoDisplayForm, self).updateWidgets()
- 
 
 
 DateDemoFormView = wrap_form(DateDemoForm)
 DateDemoDisplayFormView = wrap_form(DateDemoDisplayForm)
-
 
 
 class SmartDateDemoView(object):

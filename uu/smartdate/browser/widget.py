@@ -11,10 +11,10 @@ class SmartdateWidget(text.TextWidget):
     progressive enhancements.
     """
      
-    implementsOnly(ISmartdateWidget) #necessary for converter hookups
+    implementsOnly(ISmartdateWidget)  # necessary for converter hookups
      
     def __init__(self, *args, **kwargs):
-        self.klass = 'smartdate-widget use-locale' #TODO: support config, ISO
+        self.klass = 'smartdate-widget use-locale'  # TODO: support config, ISO
         super(SmartdateWidget, self).__init__(*args, **kwargs)
 
 

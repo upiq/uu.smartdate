@@ -10,7 +10,7 @@ PRODNAME = 'uu.smartdate'
 BASE_PATH = os.path.dirname(__file__)
 DATEJS_PATH = '/'.join((BASE_PATH, 'resources/datejs'))
 DATEJS_FILES = tuple(os.listdir(DATEJS_PATH))
-DEFAULT_FILENAME = 'date.js' # same as en-US
+DEFAULT_FILENAME = 'date.js'  # same as en-US
 
 
 class DateJSRedirectView(object):
@@ -35,7 +35,7 @@ class DateJSRedirectView(object):
                 lang = '%s-%s' % (lang, script.title())
             filename = 'date-%s-%s.js' % (lang, terr)
             if filename not in DATEJS_FILES:
-                filename = DEFAULT_FILENAME # always redirect to file that exists
+                filename = DEFAULT_FILENAME  # always redirect to existing file
         resource = '++resource++%s-datejs/%s' % (PRODNAME, filename)
         url = '/'.join((site_url, resource))
         self.request.response.redirect(url, status=302)

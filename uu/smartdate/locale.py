@@ -1,15 +1,16 @@
 from zope.i18n.locales import locales, LoadLocaleError
 from zope.publisher.browser import BrowserLanguages
 
+
 def get_locale(request):
     """
-    return locale based on HTTP request header ACCEPT_LANGUAGES.    
-    
+    return locale based on HTTP request header ACCEPT_LANGUAGES.
+
     We need languages to get locale, and the locale on the request
     object gets this wrong (removes territory part of locale). This
-    does essentially what ZPublisher.HTTPRequest does to load a 
+    does essentially what ZPublisher.HTTPRequest does to load a
     locale, but with a fixed (predictable, correct) adapter.
-    
+
     zope.publisher.browser.BrowserLangauges is an adapter with
     fixed behavior to correctly get languages.  Other adapters in
     Plone packages (e.g. PTSLanguages) may interfere with
