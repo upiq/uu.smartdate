@@ -57,6 +57,7 @@ div.smartdate div.cleardiv {
 
 div.smartdate input { display:block; float:left; }
 
+#content div.smartdate a.caltrigger,
 div.smartdate a.caltrigger {
     display:block;
     float:left;
