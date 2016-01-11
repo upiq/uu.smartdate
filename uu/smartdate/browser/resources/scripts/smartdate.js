@@ -237,7 +237,7 @@ var smartdate = (function (ns, $) {
     ns.hookup_blur_use_suggestion = function () {
         // get inputs, bind blur event
         var inputs = ns.get_date_inputs();
-        inputs.live('blur', ns.normalize_on_blur);
+        inputs.on('blur', ns.normalize_on_blur);
         ns.log('smartdate: hookup input suggestion parsing on blur');
     };
 
